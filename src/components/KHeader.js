@@ -23,8 +23,12 @@ export default avalon.component('k-header', {
     title: 'ugc上传',
     logo: '',
     loginText: '登录',
-    login: function(){
-
+    ...avalon.store.mapActions(['login']),
+    onReady () {
+      avalon.store.$watch('state.isLogin', (value) => {
+        this.loginText = value ? '退出' : '登录'
+      })
+      avalon.store.dispatch('autoLogin')
     }
   }
 })

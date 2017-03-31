@@ -8,7 +8,6 @@ avalon.config({
 
 document.domain = 'kankan.com'
 
-require('./App')
 require('./router')
 require('./store')
-
+require('./App')

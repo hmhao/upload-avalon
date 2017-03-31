@@ -10,7 +10,8 @@ module.exports = {
         // Put things like jQuery, etc
         "jQuery": true,
         "$": true,
-        "avalon": true
+        "avalon": true,
+        "xlQuickLogin": true
     },
     "env": {
         "browser": true,

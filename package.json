@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "avalon2": "^2.2.4",
+    "cookie_js": "^1.2.2",
     "es6-promise": "^4.1.0",
     "lodash": "^4.17.4",
-    "mmRouter": "^0.9.6",
-    "requirejs": "^2.3.3"
+    "mmRouter": "^0.9.6"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

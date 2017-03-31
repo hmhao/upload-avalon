@@ -1,7 +1,5 @@
-import {defaultsDeep} from 'lodash'
-
 avalon.component('k-view', {
-  template: '<div ms-html="@page" class="ms-view"></div>',
+  template: '<div ms-html="@page"></div>',
   defaults: {
     page: '&nbsp;',
     path: 'no',
@@ -15,12 +13,11 @@ avalon.component('k-view', {
       })
     },
     onDispose: function(e) {
-      /*var path = e.vmodel.path
-      var state = avalon.store.states[path]
-      var vm = state.vm
-      var render = vm.render
+      let router = avalon.router.vm
+      let vm = router.route.vm //视图vm
+      let render = vm.render
       render && render.dispose()
-      delete avalon.vmodels[vm.$id]*/
+      delete avalon.vmodels[vm.$id]
     }
   }
 });
@@ -37,8 +34,11 @@ class Router {
       this.add(path, vm, html)
     })
     this.$id = 'router'
-    avalon.router.vm = avalon.define(this)
-    avalon.router.vm = defaultsDeep(avalon.router.vm, this)
+    let vm = avalon.define(this)
+    //手动设置原型链上的方法
+    vm.add = this.add
+    vm.view = this.view
+    avalon.router.vm = vm
     avalon.history.start()
   }
   add (path, vm, html) {
@@ -48,9 +48,9 @@ class Router {
       let routes = vm.$routes
       let view = vm.view(this.path)
       vm.route = {
-        path: this.path,
-        vm: view.vm,
-        html: view.html
+        path: this.path,// 路由路径
+        vm: view.vm,// 视图vm
+        html: view.html// 视图模板
       }
     })
   }
