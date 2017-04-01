@@ -5,7 +5,9 @@ var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+var LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+var es3ifyPlugin = require('es3ify-webpack-plugin')
+var ReplacePlugin = require('replace-bundle-webpack-plugin')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -22,6 +24,33 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': config.dev.env
     }),
+    new es3ifyPlugin(),
+    new ReplacePlugin([{
+      partten: /Object\.defineProperty\(__webpack_exports__,\s*"__esModule",\s*\{\s*value:\s*true\s*\}\);/g,
+      replacement: function () {
+        return '__webpack_exports__.__esModule = true;';
+      }
+    },{
+      partten: /\/\**\/\s*Object\.defineProperty\(exports,\s*name,\s*\{[^})]*\}\);/g,
+      replacement: function () {
+        return '/******/            exports[name] = getter;';
+      }
+    },{
+      partten: /,\s*hotCreateRequire\(moduleId\)/g,
+      replacement: function () {
+        return ', (this.noHotCreateRequire ? __webpack_require__ : hotCreateRequire(moduleId))'
+      }
+    },{
+      partten: /return\s*?(hotCreateRequire\(\d+\)\((.*)\))/g,
+      replacement: function (str, p1, p2) {
+        return `return this.noHotCreateRequire ? __webpack_require__(${p2}) : ${p1}`
+      }
+    },{
+      partten: /var\s*hotClient\s*=\s*__webpack_require__\(\d+\)/g,
+      replacement: function (str) {
+        return `if(window.noHotCreateRequire){return}\n${str}`
+      }
+    }]),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

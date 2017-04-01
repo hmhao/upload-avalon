@@ -4,7 +4,7 @@ function normalizeMap (map) {
     : Object.keys(map).map(key => ({ key, val: map[key] }))
 }
 
-export const mapGetters = function(getters) {
+export function mapGetters(getters) {
   const res = {}
   let store = this
   normalizeMap(getters).forEach(({ key, val }) => {
@@ -17,7 +17,7 @@ export const mapGetters = function(getters) {
   return res
 }
 
-export const mapActions = function(actions) {
+export function mapActions(actions) {
   const res = {}
   let store = this
   normalizeMap(actions).forEach(({ key, val }) => {
