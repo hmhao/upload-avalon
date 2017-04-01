@@ -6,8 +6,34 @@ avalon.config({
   debug: true
 })
 
+function readyHook(onReady, storeMappedGetter){
+  return function(){
+    avalon.each(storeMappedGetter, (i, getter) => {
+      this[getter.key] = getter.fn()// onReady赋值一次,因为可能已触发过watch回调
+      avalon.store.$watch('state.'+getter.key, (value) => {
+        this[getter.key] = value
+      })
+    })
+    onReady && onReady.call(this)
+  }
+}
+
 avalon.registerComponent = function(component) {
   let data = component.defaults || {}
+  if(component.computed){
+    let storeMappedGetter = []
+    data.$computed = data.$computed || {}
+    avalon.each(component.computed, (key, fn) => {
+      if(fn.fnName === 'mappedGetter'){
+        storeMappedGetter.push({key, fn})// 留到onReady时添加监听
+        data[key] = fn()
+      }else{
+        data.$computed[key] = fn
+      }
+    })
+    delete component.computed
+    data.onReady = readyHook(data.onReady, storeMappedGetter)
+  }
   if(component.methods){
     avalon.mix(data, component.methods)
     delete component.methods

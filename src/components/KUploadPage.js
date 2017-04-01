@@ -2,8 +2,8 @@ import KUpload from './KUpload'
 
 let template = 
 `
-<div>
-  <xmp :css="{top:isLogin?'0px':'-1000px'}" :widget="{is: 'k-upload'}"></xmp>
+<div style="overflow-y:hidden">
+  <xmp :css="{marginTop:isLogin?'0px':'-90px'}" :widget="{is: 'k-upload'}"></xmp>
   <div :visible="!isLogin">
     <img src="/static/logo.png" />
     <div>
@@ -18,12 +18,9 @@ export default {
   name: 'k-upload-page',
   template,
   defaults: {
-    ...avalon.store.mapGetters(['isLogin']),
-    onReady () {
-      avalon.store.$watch('state.isLogin', (value) => {
-        this.isLogin = value
-      })
-    }
+  },
+  computed: {
+    ...avalon.store.mapGetters(['isLogin'])
   },
   components: {
     KUpload

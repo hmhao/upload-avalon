@@ -1,5 +1,5 @@
-import KHeader from './components/KHeader'
-import KFooter from './components/KFooter'
+import KHeader from '@/components/KHeader'
+import KFooter from '@/components/KFooter'
 
 let template = 
 `

@@ -12,7 +12,10 @@ export function mapGetters(getters) {
       console.error(`[vuex] unknown getter: ${val}`)
       return
     }
-    res[key] = store.state[val]
+    res[key] = function mappedGetter () {
+      return store.state[val]
+    }
+    res[key].fnName = 'mappedGetter'
   })
   return res
 }

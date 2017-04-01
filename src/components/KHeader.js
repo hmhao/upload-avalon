@@ -9,6 +9,7 @@ let template =
         <span :visible="!@logo" class="navbar-brand-text" :text="@title"></span>
       </a>
       <div class="navbar-brand-action pull-right">
+        <a class="label label-default" :if="@user">{{@user.nick}}</a>
         <a class="btn btn-lg btn-default" href="javascript:void(0)" :text="loginText" ms-click="@login"></a>
         <a class="btn btn-lg btn-success" href="javascript:void(0)">上传视频</a>
       </div>
@@ -22,13 +23,13 @@ export default {
   template,
   defaults: {
     title: 'ugc上传',
-    logo: '',
-    loginText: '登录',
-    ...avalon.store.mapActions(['login']),
-    onReady () {
-      avalon.store.$watch('state.isLogin', (value) => {
-        this.loginText = value ? '退出' : '登录'
-      })
+    logo: ''
+  },
+  computed: {
+    ...avalon.store.mapGetters(['isLogin', 'user']),
+    loginText () {
+      return this.isLogin ? '退出' : '登录'
     }
-  }
+  },
+  methods: avalon.store.mapActions(['login'])
 }
