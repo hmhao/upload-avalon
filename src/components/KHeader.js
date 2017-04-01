@@ -17,8 +17,9 @@ let template =
 </header>
 `
 
-export default avalon.component('k-header', {
-  template: template,
+export default {
+  name: 'k-header',
+  template,
   defaults: {
     title: 'ugc上传',
     logo: '',
@@ -28,7 +29,6 @@ export default avalon.component('k-header', {
       avalon.store.$watch('state.isLogin', (value) => {
         this.loginText = value ? '退出' : '登录'
       })
-      avalon.store.dispatch('autoLogin')
     }
   }
-})
+}

@@ -26,8 +26,9 @@ var template =
 </footer>
 `
 
-export default avalon.component('k-footer', {
-  template: template,
+export default {
+  name: 'k-footer',
+  template,
   defaults: {}
-})
+}
 

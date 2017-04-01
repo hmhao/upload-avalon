@@ -8,13 +8,11 @@ export const mapGetters = function(getters) {
   const res = {}
   let store = this
   normalizeMap(getters).forEach(({ key, val }) => {
-    res[key] = function mappedGetter () {
-      if (!(val in this.getters)) {
-        console.error(`[vuex] unknown getter: ${val}`)
-        return
-      }
-      return store.$getters[val]
+    if (!(val in store.state)) {
+      console.error(`[vuex] unknown getter: ${val}`)
+      return
     }
+    res[key] = store.state[val]
   })
   return res
 }

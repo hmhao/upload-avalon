@@ -1,5 +1,5 @@
 avalon.component('k-view', {
-  template: '<div ms-html="@page"></div>',
+  template: '<div ms-html="@page" class="kview"></div>',
   defaults: {
     page: '&nbsp;',
     path: 'no',
@@ -20,62 +20,55 @@ avalon.component('k-view', {
       delete avalon.vmodels[vm.$id]
     }
   }
-});
+})
 
-class Router {
-  $id = ''
-  $routes = {}
-  route = {}
-  constructor(options) {
-    (options.routes || []).forEach(route => {
-      let path = route.path
-      let html = route.html || require('@/html' + path + '.html')
-      let vm = route.vm || require('@/js' + path + '.js')
-      this.add(path, vm, html)
-    })
-    this.$id = 'router'
-    let vm = avalon.define(this)
-    //手动设置原型链上的方法
-    vm.add = this.add
-    vm.view = this.view
-    avalon.router.vm = vm
-    avalon.history.start()
-  }
-  add (path, vm, html) {
+function Router (options) {
+  this.$id = 'router';
+  this.$routes = {};
+  this.route = {};
+  this.add = function (path, vm, html) {
     this.$routes[path] = {path, vm, html}
     avalon.router.add(path, function() {
-      let vm = avalon.router.vm
-      let routes = vm.$routes
-      let view = vm.view(this.path)
-      vm.route = {
+      let self = avalon.router.vm
+      let routes = self.$routes
+      let view = self.view(this.path)
+      self.route = {
         path: this.path,// 路由路径
         vm: view.vm,// 视图vm
         html: view.html// 视图模板
       }
     })
-  }
-  view (path) {
+  };
+  this.view = function (path) {
     return this.$routes[path]
-  }
+  };
+
+  (options.routes || []).forEach(route => {
+    let path = route.path
+    let html, vm
+    if(route.component){
+      avalon.registerComponent(route.component)
+      html = `<xmp :widget="{is: '${route.component.name}'}"></xmp>`
+      vm = true
+    }
+    this.add(path, vm, html)
+  });
+  let vm = avalon.define(this);
+  avalon.router.vm = vm;
+  avalon.history.start();
+  avalon.router.navigate('/index', 0);
 }
 
-avalon.router.Router = Router
 // avalon.router.navigate('/bb/second', 0);
 // avalon.history.setHash('/bb/second');
+
+import KUploadPage from '../components/KUploadPage'
 
 export default new Router({
   routes: [
     {
-      path: '/aa/first'
-    },
-    {
-      path: '/bb/second'
-    },
-    {
-      path: '/cc/third'
-    },
-    {
-      path: '/dd/four'
+      path: '/index',
+      component: KUploadPage
     }
   ]
 })

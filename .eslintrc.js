@@ -11,7 +11,8 @@ module.exports = {
         "jQuery": true,
         "$": true,
         "avalon": true,
-        "xlQuickLogin": true
+        "xlQuickLogin": true,
+        "WebUploader": true,
     },
     "env": {
         "browser": true,
@@ -36,7 +37,7 @@ module.exports = {
         "no-unreachable": 2, // 禁止在return、throw、continue 和 break 语句之后出现不可达代码
         "use-isnan": 2, // 要求使用 isNaN() 检查 NaN
         "valid-typeof": 2, // 强制 typeof 表达式与有效的字符串进行比较
-        "eqeqeq": [2, "always"], // 要求使用 === 和 !==
+        "eqeqeq": [0, "always"], // 要求使用 === 和 !==
         "quotes": [2, "single"], // 强制使用一致的反勾号、双引号或单引号
         "no-caller": 2, // 禁用 arguments.caller 或 arguments.callee
         "no-eval": 2, // 禁用 eval()

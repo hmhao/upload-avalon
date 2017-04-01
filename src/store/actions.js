@@ -22,7 +22,7 @@ const actions = {
           }
         }, [], false, 'utf-8');
       })
-    },
+  },
   // 登录或登出
   login: ({ state, commit }) => {
     if (!state.isLogin) {

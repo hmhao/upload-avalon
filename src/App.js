@@ -1,26 +1,26 @@
-import KHeader from '@/components/KHeader'
-import KFooter from '@/components/KFooter'
+import KHeader from './components/KHeader'
+import KFooter from './components/KFooter'
 
 let template = 
 `
-<div :controller="app">
+<div>
   <p><a href='#!/aa/first'>点我first</a>|<a href='#!/bb/second'>点我second</a>|<a href='#!/cc/third'>点我third</a>|<a href='#!/dd/four'>点我four</a></p>
-  <xmp :widget="@$header"></xmp>
+  <xmp :widget="{is: 'k-header'}"></xmp>
   <xmp :widget="{is: 'k-view'}"></xmp>
-  <xmp :widget="@$footer"></xmp>
+  <xmp :widget="{is: 'k-footer'}"></xmp>
 </div>
 `
 
-$('#app').append(template)
-
-avalon.define({
-  $id: 'app',
-  $header: {
-    is: 'k-header'
+export default {
+  name: 'app',
+  template,
+  defaults: {
+    onReady () {
+      avalon.store.dispatch('autoLogin')
+    }
   },
-  $footer: {
-    is: 'k-footer'
+  components: {
+    KHeader,
+    KFooter
   }
-})
-
-avalon.ready(() => avalon.scan(document.body))
+}
