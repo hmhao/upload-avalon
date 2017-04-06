@@ -13,7 +13,4 @@ let fixAjaxOptions = function (options) {
 
 export default function Ajax(options){
   return $.ajax(fixAjaxOptions(options))
-    .always(function(){
-      console.log(0)
-    })
 }

@@ -11,7 +11,7 @@ let template =
       <div class="navbar-brand-action pull-right">
         <a class="label label-default" :if="@user">{{@user.nick}}</a>
         <a class="btn btn-lg btn-default" href="javascript:void(0)" :text="loginText" ms-click="@login"></a>
-        <a class="btn btn-lg btn-success" href="javascript:void(0)">上传视频</a>
+        <a class="btn btn-lg btn-success" href="#!/index">上传视频</a>
       </div>
     </div>
   </div><!-- /.container-fluid -->
