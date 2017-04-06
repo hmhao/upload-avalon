@@ -1,4 +1,4 @@
-import router from './router'
+import mmRouter from './mmRouter'
 
 avalon.component('k-view', {
   template: '<div ms-html="@page" class="kview"></div>',
