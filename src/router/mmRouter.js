@@ -135,13 +135,17 @@ avalon.mix(storage, {
      *  @param path 被重定向的表达式，可以是字符串或者数组
      *  @param redirect 重定向的表示式或者url
      */
-    when: function (path, redirect) {
+    when: function (path, redirect, callback) {
         var me = this,
                 path = path instanceof Array ? path : [path]
         avalon.each(path, function (index, p) {
             me.add(p, function () {
                 var info = me.urlFormate(redirect, this.params, this.query)
-                me.navigate(info.path + info.query)
+                if(callback){
+                    callback.call(me, info)
+                } else {
+                    me.navigate(info.path + info.query)
+                }
             })
         })
         return this

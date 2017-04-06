@@ -18,6 +18,7 @@ var defaults = {
     autoScroll: false
 }
 var mmHistory = {
+    isinit: true,
     hash: getHash(location.href),
     check: function() {
         var h = getHash(location.href)
@@ -91,7 +92,9 @@ var mmHistory = {
                     if (avalon.msie) {
                         function onPropertyChange() {
                             if (event.propertyName === 'location') {
-                                mmHistory.check()
+                                setTimeout(function(){
+                                    mmHistory.check()
+                                },1)
                             }
                         }
                         document.attachEvent('onpropertychange', onPropertyChange)
@@ -107,6 +110,7 @@ var mmHistory = {
         }
         //页面加载时触发onHashChanged
         this.onHashChanged()
+        this.isinit = false
     },
     stop: function() {
         switch (this.mode) {
@@ -188,11 +192,11 @@ var mmHistory = {
     onHashChanged: function(hash, clickMode) {
         if (!clickMode) {
             hash = mmHistory.mode === 'popstate' ? mmHistory.getPath() :
-                location.href.replace(/.*#!?/, '')
+                location.href.replace(/[^#]+#?!?/, '')
         }
         hash = decodeURIComponent(hash)
         hash = hash.charAt(0) === '/' ? hash : '/' + hash
-        if (hash !== mmHistory.hash) {
+        if (hash !== mmHistory.hash || mmHistory.isinit) {
             mmHistory.hash = hash
 
             if (avalon.router) { //即mmRouter
@@ -219,11 +223,12 @@ function getHash(path) {
     // 又比如 http://www.cnblogs.com/rubylouvre/#!/home/q={%22thedate%22:%2220121010~20121010%22}
     // firefox 15 => #!/home/q={"thedate":"20121010~20121010"}
     // 其他浏览器 => #!/home/q={%22thedate%22:%2220121010~20121010%22}
-    var index = path.indexOf("#")
+    /*var index = path.indexOf("/#")
     if (index === -1) {
         return ''
     }
-    return decodeURI(path.slice(index))
+    return decodeURI(path.slice(index))*/
+    return path.replace(/[^#]+#?!?/, '')
 }
 
 
