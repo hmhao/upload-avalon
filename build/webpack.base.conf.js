@@ -24,7 +24,6 @@ module.exports = {
       //'avalon': resolve('node_modules/avalon2/dist/avalon.js'),
       // avalon: resolve('node_modules/avalon2/dist/avalon.modern.js'),
       'avalon': 'avalon2',
-      'mmRouter': 'mmRouter',
       'cookie': 'cookie_js',
       'lodash': 'lodash'
     }

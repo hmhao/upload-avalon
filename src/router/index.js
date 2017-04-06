@@ -1,3 +1,5 @@
+import router from './router'
+
 avalon.component('k-view', {
   template: '<div ms-html="@page" class="kview"></div>',
   defaults: {
@@ -59,16 +61,23 @@ function Router (options) {
   avalon.router.navigate('/index', 0);
 }
 
-// avalon.router.navigate('/bb/second', 0);
-// avalon.history.setHash('/bb/second');
-
 import KUploadPage from '../components/KUploadPage'
+import KVideoList from '../components/KVideoList'
+import KAlbumList from '../components/KAlbumList'
 
 export default new Router({
   routes: [
     {
       path: '/index',
       component: KUploadPage
+    },
+    {
+      path: '/video',
+      component: KVideoList
+    },
+    {
+      path: '/album',
+      component: KAlbumList
     }
   ]
 })

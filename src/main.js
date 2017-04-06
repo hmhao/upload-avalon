@@ -1,6 +1,5 @@
 ﻿require('es6-promise').polyfill()
 require('avalon')
-require('mmRouter')
 
 avalon.config({
   debug: true
