@@ -28,23 +28,23 @@ function Router (options) {
   this.$id = 'router';
   this.$routes = {};
   this.route = {};
-  this.add = function (path, redirect, html, vm) {
-    if(redirect){
-      avalon.router.when(path, redirect, function(info){
+  this.add = function (route) {
+    if(route.redirect){
+      avalon.router.when(route.path, route.redirect, function(info){
         let path = (info.path.charAt(0) === '/' ? info.path : '/' + info.path) + info.query
         avalon.router.navigate(path, 2)
       })
     }else{
-      this.$routes[path] = {path, vm, html}
-      avalon.router.add(path, function() {
+      this.$routes[route.path] = route
+      avalon.router.add(route.path, function() {
         let self = avalon.router.vm
         let routes = self.$routes
         let view = self.view(this.path)
         self.route = {
-          path: this.path,// 路由路径
-          vm: view.vm,// 视图vm
+          path: view.path,// 路由路径
           html: view.html// 视图模板
         }
+        avalon.title.text = view.title
       })
     }
   };
@@ -54,15 +54,12 @@ function Router (options) {
 
   avalon.ready(()=>{
     (options.routes || []).forEach(route => {
-      let path = route.path
-      let redirect = route.redirect
       let html, vm
       if(route.component){
         avalon.registerComponent(route.component)
-        html = `<xmp :widget="{is: '${route.component.name}'}"></xmp>`
-        vm = true
+        route.html = `<xmp :widget="{is: '${route.component.name}'}"></xmp>`
       }
-      this.add(path, redirect, html, vm)
+      this.add(route)
     });
     let vm = avalon.define(this);
     avalon.router.vm = vm;
@@ -84,14 +81,17 @@ export default new Router({
     },
     {
       path: '/index',
+      title: '上传',
       component: KUploadPage
     },
     {
       path: '/video',
+      title: '视频管理',
       component: KVideoList
     },
     {
       path: '/album',
+      title: '节目管理',
       component: KAlbumList
     }
   ]

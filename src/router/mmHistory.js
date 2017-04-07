@@ -5,7 +5,6 @@
  * https://github.com/visionmedia/page.js/blob/master/page.js
  */
 
-var location = document.location
 var oldIE = avalon.msie <= 7
 var supportPushState = !!(window.history.pushState)
 var supportHashChange = !!("onhashchange" in window && (!window.VBArray || !oldIE))
@@ -17,13 +16,17 @@ var defaults = {
     interval: 50, //IE6-7,使用轮询，这是其时间时隔,
     autoScroll: false
 }
+var mmTitle = {
+    text: document.title,
+    timer: null,
+    delay: 200
+}
 var mmHistory = {
     isinit: true,
-    hash: getHash(location.href),
+    hash: getHash(document.location.href),
     check: function() {
-        var h = getHash(location.href)
+        var h = getHash(document.location.href)
         if (h !== this.hash) {
-            this.hash = h
             this.onHashChanged()
         }
     },
@@ -84,11 +87,11 @@ var mmHistory = {
                 //也有人这样玩 http://www.cnblogs.com/meteoric_cry/archive/2011/01/11/1933164.html
                 avalon.ready(function() {
                     var iframe = document.createElement('iframe')
-                    iframe.id = options.iframeID
+                    iframe.id = options.iframeID || avalon.makeHashCode('ifr')
                     iframe.style.display = 'none'
                     document.body.appendChild(iframe)
                     mmHistory.iframe = iframe
-                    mmHistory.writeFrame('')
+                    mmHistory.writeFrame(getHash(document.location.href))
                     if (avalon.msie) {
                         function onPropertyChange() {
                             if (event.propertyName === 'location') {
@@ -157,33 +160,40 @@ var mmHistory = {
             default:
                 //http://stackoverflow.com/questions/9235304/how-to-replace-the-location-hash-and-only-keep-the-last-history-entry
                 var newHash = this.options.hashPrefix + s
-                if (replace && location.hash !== newHash) {
+                if (replace && document.location.hash !== newHash) {
                     history.back()
                 }
-                location.hash = newHash
+                document.location.hash = newHash
                 break
         }
     },
     writeFrame: function(s) {
         // IE support...
         var f = mmHistory.iframe
-        var d = f.contentDocument || f.contentWindow.document
+        try{
+            var d = f.contentDocument || f.contentWindow.document
+        }catch(e){
+            var location = window.document.location
+            var hash = location.hash.substring(1)
+            var href = location.href
+            window.document.location = href.replace(hash, s)
+            return window.document.location.reload()
+        }
         d.open()
-        var end ="/script"
-        d.write("<script>_hash = '" + s + "'; onload = parent.avalon.history.syncHash;<"+end+">")
+        d.write("<script>_hash = '" + s + "'; onload = parent.avalon.history.syncHash;</script>")
         d.close()
     },
     syncHash: function() {
         // IE support...
         var s = this._hash
-        if (s !== getHash(location.href)) {
-            location.hash = s
+        if (s !== getHash(document.location.href)) {
+            document.location.hash = s
         }
         return this
     },
 
     getPath: function() {
-        var path = location.pathname.replace(this.options.root, '')
+        var path = document.location.pathname.replace(this.options.root, '')
         if (path.charAt(0) !== '/') {
             path = '/' + path
         }
@@ -192,7 +202,7 @@ var mmHistory = {
     onHashChanged: function(hash, clickMode) {
         if (!clickMode) {
             hash = mmHistory.mode === 'popstate' ? mmHistory.getPath() :
-                location.href.replace(/[^#]+#?!?/, '')
+                document.location.href.replace(/[^#]+#?!?/, '')
         }
         hash = decodeURIComponent(hash)
         hash = hash.charAt(0) === '/' ? hash : '/' + hash
@@ -210,7 +220,14 @@ var mmHistory = {
                 autoScroll(hash.slice(1))
             }
         }
+        clearTimeout(mmTitle.timer)
 
+        mmTitle.timer = setTimeout(function(){
+            if(document.title !== mmTitle.text){
+                document.title = mmTitle.text
+            }
+        }, mmTitle.delay)
+        
     }
 }
 
@@ -326,5 +343,5 @@ function autoScroll(hash) {
     }
 }
 
-
+avalon.title = mmTitle
 module.exports = avalon.history = mmHistory
