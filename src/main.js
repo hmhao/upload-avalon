@@ -5,7 +5,7 @@ avalon.config({
   debug: true
 })
 
-function readyHook(onReady, storeMappedGetter){
+function readyHook(onReady, storeMappedGetter, watch){
   return function(){
     avalon.each(storeMappedGetter, (i, getter) => {
       this[getter.key] = getter.fn()// onReady赋值一次,因为可能已触发过watch回调
@@ -13,14 +13,18 @@ function readyHook(onReady, storeMappedGetter){
         this[getter.key] = value
       })
     })
+    avalon.each(watch, (i, w) => {
+      this.$watch(w.key, w.fn)
+    })
     onReady && onReady.call(this)
   }
 }
 
 avalon.registerComponent = function(component) {
   let data = component.defaults || {}
+  let storeMappedGetter = []
+  let watch = []
   if(component.computed){
-    let storeMappedGetter = []
     data.$computed = data.$computed || {}
     avalon.each(component.computed, (key, fn) => {
       if(fn.fnName === 'mappedGetter'){
@@ -31,8 +35,14 @@ avalon.registerComponent = function(component) {
       }
     })
     delete component.computed
-    data.onReady = readyHook(data.onReady, storeMappedGetter)
   }
+  if(component.watch){
+    avalon.each(component.watch, (key, fn) => {
+      watch.push({key, fn})
+    })
+    delete component.watch
+  }
+  (storeMappedGetter.length || watch.length) && (data.onReady = readyHook(data.onReady, storeMappedGetter, watch))
   if(component.methods){
     avalon.mix(data, component.methods)
     delete component.methods

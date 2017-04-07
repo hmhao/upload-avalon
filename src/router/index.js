@@ -1,17 +1,38 @@
 import mmRouter from './mmRouter'
 
+let template = 
+`
+<div class="kview">
+  <div :css="{marginLeft:@showUpload?'0px':'-10000px',position:@showUpload?'':'absolute'}" ms-html="@uppage"></div>
+  <div :if="@page" ms-html="@page"></div>
+</div>
+`
+
 avalon.component('k-view', {
-  template: '<div ms-html="@page" class="kview"></div>',
+  template,
   defaults: {
-    page: '&nbsp;',
+    showUpload: false,
+    uppage: '',
+    page: '',
     path: 'no',
+    update: function(route){
+      this.path = route.path
+      if(route.path === '/index'){
+        if(!this.uppage){
+          this.uppage = route.html
+        }
+        this.page = ''
+        this.showUpload = true
+      }else{
+        this.page = route.html
+        this.showUpload = false
+      }
+    },
     onReady: function(e) {
       let router = avalon.router.vm
-      this.path = router.route.path
-      this.page = router.route.html
+      this.update(router.route)
       router.$watch('route', (route) => {
-        this.path = route.path
-        this.page = route.html
+        this.update(router.route)
       })
     },
     onDispose: function(e) {
