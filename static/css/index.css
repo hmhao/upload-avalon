@@ -1,0 +1,65 @@
+@charset "utf-8";
+/*reset*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,fieldset{ margin:0;padding:0;}
+img ,fieldset{border: 0;}
+ol,ul {list-style: none;}
+em {font-style: normal;}
+body {text-align: left;font: 12px/1.5 Arial, "hiragino sans gb","microsoft yahei","simsun", Helvetica, sans-serif;color: #333;background: #F2F2F3;-webkit-text-size-adjust:none;height:100%;}
+a {cursor: pointer;color: #333;text-decoration: none;outline: 0 none;}
+a:hover {color:#21b7ef;text-decoration:none;}
+input{font-size:12px; color: #979797;outline: none;}
+button{cursor: pointer;}
+h1,h2,h3,h4,h5,h6{font-size: 12px;font-weight: normal;}
+section,article,aside,header,footer,nav,dialog,figure,hgroup{display: block;}
+textarea{resize: none;}
+table{border-collapse: collapse;border-spacing: 0;}
+.hide{text-indent: -9999px;}
+.clearfix:after,.wrapper:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix,.wrapper{*zoom:1;}
+* html,* html body /* 修正IE6振动bug */{background-image:url(about:blank);background-attachment:fixed;} 
+
+.wrapper{width:940px;min-width:940px;margin:0 auto;position:relative;overflow:hidden;*zoom:1;}
+
+/*footer*/
+.footer{background:#FFFFFF;line-height:24px;padding:40px 0;margin-top:20px;}
+.footer_link {height: 120px;}
+.footer_link dl {float: left; display: inline; width: 109px; height: 120px; margin-left: 60px; border-right: 1px #e5e5e5 solid;}
+.footer_link .first {margin: 0 0 0 160px;}
+.footer_link .last {border: none;}
+.footer_link dt {height: 40px; font-size: 14px; color: #868686;}
+.footer_link dd {line-height: 28px;}
+.footer_ul {float: left; width: 990px; margin-top: 50px;}
+.footer_ul li {float: left; width: 330px; line-height: 28px;}
+.footer_ul img {float: left; margin: 8px 5px 0 0;}
+.footer_qr {float: right; margin-top: 40px;}
+.footer_cp {margin-top: 50px; color: #848484; text-align: center;}
+
+/*animation*/
+@-webkit-keyframes pop_fadein{
+  0%{opacity:0;-webkit-transform:translateY(-30px)}
+  50%{opacity:1;-webkit-transform:translateY(4px)}
+  80%{-webkit-transform:translateY(-2px)}
+  100%{-webkit-transform:translateY(0);}
+}
+@keyframes pop_fadein{
+  0%{opacity:0;transform:translateY(-30px)}
+  50%{opacity:1;transform:translateY(4px)}
+  80%{transform:translateY(-2px)}
+  100%{transform:translateY(0);}
+}
+@-webkit-keyframes navIn{
+  0%{opacity:0;-webkit-transform:scale(1,0);}
+  100%{opacity:1;-webkit-transform:scale(1,1);}
+}
+@keyframes navIn{
+  0%{opacity:0;transform:scale(1,0);}
+  100%{opacity:1;transform:scale(1,1);}
+}
+@-webkit-keyframes fadein {
+  0% {opacity: 0;}
+  100% { opacity: 1;}
+}
+@keyframes fadein {
+  0% {opacity: 0;}
+  100% { opacity: 1;}
+}
