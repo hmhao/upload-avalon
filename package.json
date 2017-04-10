@@ -1,7 +1,7 @@
 {
-  "name": "kk-upload-avalon",
+  "name": "upload-avalon",
   "version": "1.0.0",
-  "description": "kk upload manager",
+  "description": "upload manager",
   "author": "hmh <215795583@qq.com>",
   "private": true,
   "scripts": {
