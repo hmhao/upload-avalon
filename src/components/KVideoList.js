@@ -1,55 +1,60 @@
+import KPagination from '@/components/base/KPagination'
+
 let template = 
 `
-<table class="table table-bordered">
-  <thead>
-    <tr class="text-center">
-      <td><input type="checkbox" :attr="{checked: allChecked}" :click="checkAll"/></td>
-      <td>视频</td>
-      <td>状态</td>
-      <td>热度</td>
-      <td>操作</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr :for="(i, v) in list">
-      <td>
-        <input type="checkbox" :attr="{checked: v.checked}" :click="checkOne($event, v)"/>
-      </td>
-      <td style="width: 60%">
-        <div class="media">
-          <div class="media-left">
-            <a href="javascript:void(0)">
-              <img style="width: 138px; height: 78px;" :attr="{src: v.poster}">
-            </a>
+<div>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="text-center">
+        <td><input type="checkbox" :attr="{checked: allChecked}" :click="checkAll"/></td>
+        <td>视频</td>
+        <td>状态</td>
+        <td>热度</td>
+        <td>操作</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr :for="(i, v) in list">
+        <td>
+          <input type="checkbox" :attr="{checked: v.checked}" :click="checkOne($event, v)"/>
+        </td>
+        <td style="width: 60%">
+          <div class="media">
+            <div class="media-left">
+              <a href="javascript:void(0)">
+                <img style="width: 138px; height: 78px;" :attr="{src: v.poster}">
+              </a>
+            </div>
+            <div class="media-body text-left">
+              <dl>
+                <dt :attr="{title: v.title}">{{v.title}}</dt>
+                <dd>{{v.create_time}}</dd>
+              </dl>
+            </div>
           </div>
-          <div class="media-body text-left">
-            <dl>
-              <dt :attr="{title: v.title}">{{v.title}}</dt>
-              <dd>{{v.create_time}}</dd>
-            </dl>
-          </div>
-        </div>
-      </td>
-      <td>
-        <p>{{v.status | statusMsg}}</p>
-      </td>
-      <td>
-        <p>
-          <i class="icon icon_redio"></i>
-          <span class="redtext">{{v.plays}}</span>
-        </p>
-        <p>
-          <i class="icon icon_redio"></i>
-          <span class="redtext">{{v.comments}}</span>
-        </p>
-      </td>
-      <td>
-        <p><a href="javascript:void(0)" :click="edit">编辑</a></p>
-        <p><a href="javascript:void(0)" :click="remove">删除</a></p>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        </td>
+        <td>
+          <p>{{v.status | statusMsg}}</p>
+        </td>
+        <td>
+          <p>
+            <i class="icon icon_redio"></i>
+            <span class="redtext">{{v.plays}}</span>
+          </p>
+          <p>
+            <i class="icon icon_redio"></i>
+            <span class="redtext">{{v.comments}}</span>
+          </p>
+        </td>
+        <td>
+          <p><a href="javascript:void(0)" :click="edit">编辑</a></p>
+          <p><a href="javascript:void(0)" :click="remove">删除</a></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <k-pagination :widget="$$ref.pagination"></k-pagination>
+</div>
 `
 
 let uploadStatus = {
@@ -116,6 +121,9 @@ export default {
     },
     remove () {
 
+    },
+    onPageChange (evt, curPage) {
+
     }
   },
   filters: {
@@ -123,4 +131,13 @@ export default {
       return uploadStatus[status] || '未知错误'
     }
   },
+  // 模板书写组件:widget的值必须与ref一致,当前组件可通过ref对应的值获取到子组件的vmodel
+  components: [{
+    component: KPagination,
+    $$ref: 'pagination',
+    props: {
+      totalPages: 15
+    },
+    events: ['onPageChange'] // 对依赖的组件关联事件,依赖组件分发事件时会自动调用
+  }]
 }
