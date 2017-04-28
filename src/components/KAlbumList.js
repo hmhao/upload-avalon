@@ -59,7 +59,8 @@ let template =
 export default {
   name: 'k-album-list',
   template,
-  defaults: {
+  data () {
+    return {}
   },
   computed: {
   }

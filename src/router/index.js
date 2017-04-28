@@ -3,17 +3,19 @@ import mmRouter from './mmRouter'
 avalon.registerComponent({
   name: 'k-view',
   template: '<div :html="component"></div>',
-  defaults: {
-    component: '',
+  data () {
+    return {
+      component: ''
+    }
+  },
+  methods: {
     onReady: function(e) {
       let router = avalon.router.vm
       this.update(router.route)
       router.$watch('route', (route) => {
         this.update(router.route)
       })
-    }
-  },
-  methods: {
+    },
     update: function(route){
       if(route.path !== '/upload'){
         this.component = `<xmp :widget="{is: '${route.component}', id: '${route.component}'}"></xmp>`

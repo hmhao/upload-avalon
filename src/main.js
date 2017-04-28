@@ -63,7 +63,14 @@ function disposeHook(onDispose, storeMappedGetter, watch, componentRef){
 avalon.registerComponent = function(component) {
   if(avalon.components[component.name]) return
 
-  let data = component.defaults || {}
+  let data = component.data || component.defaults
+  delete component.data
+  data = avalon.isFunction(data) ? data() : data || {}
+  if (!avalon.isPlainObject(data)) {
+    data = {}
+    avalon.warn(component.name + ' >> data functions should return an object')
+  }
+
   let storeMappedGetter = []
   let watch = []
   let componentRef = []

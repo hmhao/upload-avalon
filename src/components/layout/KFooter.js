@@ -44,7 +44,6 @@ var template =
 
 export default {
   name: 'k-footer',
-  template,
-  defaults: {}
+  template
 }
 

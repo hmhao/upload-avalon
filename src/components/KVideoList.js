@@ -59,7 +59,8 @@ let template =
 export default {
   name: 'k-video-list',
   template,
-  defaults: {
+  data () {
+    return {}
   },
   computed: {
   }

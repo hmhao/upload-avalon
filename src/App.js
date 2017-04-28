@@ -16,8 +16,6 @@ let template =
       </div>
     </div>
   </div>
-  
-  
   <k-footer :widget="{is: 'k-footer'}"></k-footer>
 </div>
 `

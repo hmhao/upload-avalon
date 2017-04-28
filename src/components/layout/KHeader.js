@@ -11,19 +11,21 @@ let template =
     </div>
     <ul class="nav navbar-nav navbar-right">
       <li><a class="label" :if="@user">{{@user.nick}}</a></li>
-      <li><a class="btn btn-lg btn-default" href="javascript:void(0)" :text="loginText" ms-click="@login"></a></li>
+      <li><a class="btn btn-lg btn-default" href="javascript:void(0)" :text="loginText" :click="@login"></a></li>
       <li><a class="btn btn-lg btn-success" href="#!/index">上传视频</a></li>
     </ul>
-  </div><!-- /.container-fluid -->
+  </div><!-- /.container -->
 </header>
 `
 
 export default {
   name: 'k-header',
   template,
-  defaults: {
-    title: 'ugc上传',
-    logo: ''
+  data () {
+    return {
+      title: 'ugc上传',
+      logo: ''
+    }
   },
   computed: {
     ...avalon.store.mapGetters(['isLogin', 'user']),

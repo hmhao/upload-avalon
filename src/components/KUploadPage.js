@@ -17,7 +17,8 @@ let template =
 export default {
   name: 'k-upload-page',
   template,
-  defaults: {
+  data () {
+    return {}
   },
   computed: {
     ...avalon.store.mapGetters(['isLogin'])
