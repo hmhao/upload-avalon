@@ -1,13 +1,24 @@
-import KHeader from '@/components/KHeader'
-import KFooter from '@/components/KFooter'
+import KHeader from '@/components/layout/KHeader'
+import KFooter from '@/components/layout/KFooter'
+import KNav from '@/components/layout/KNav'
 
 let template = 
 `
 <div>
-  <p><a href='#!/video'>视频管理</a>|<a href='#!/album'>节目管理</a></p>
-  <xmp :widget="{is: 'k-header'}"></xmp>
-  <xmp :widget="{is: 'k-view'}"></xmp>
-  <xmp :widget="{is: 'k-footer'}"></xmp>
+  <k-header :widget="{is: 'k-header'}"></k-header>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-2">
+        <k-nav :widget="{is: 'k-nav'}"></k-nav>
+      </div>
+      <div class="col-xs-10">
+        <k-view :widget="{is: 'k-view'}"></k-view>
+      </div>
+    </div>
+  </div>
+  
+  
+  <k-footer :widget="{is: 'k-footer'}"></k-footer>
 </div>
 `
 
@@ -21,6 +32,7 @@ export default {
   },
   components: {
     KHeader,
+    KNav,
     KFooter
   }
 }

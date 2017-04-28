@@ -1,46 +1,23 @@
 import mmRouter from './mmRouter'
 
-let template = 
-`
-<div class="kview">
-  <div :css="{marginLeft:@showUpload?'0px':'-10000px',position:@showUpload?'':'absolute'}" ms-html="@uppage"></div>
-  <div :if="@page" ms-html="@page"></div>
-</div>
-`
-
-avalon.component('k-view', {
-  template,
+avalon.registerComponent({
+  name: 'k-view',
+  template: '<div :html="component"></div>',
   defaults: {
-    showUpload: false,
-    uppage: '',
-    page: '',
-    path: 'no',
-    update: function(route){
-      this.path = route.path
-      if(route.path === '/index'){
-        if(!this.uppage){
-          this.uppage = route.html
-        }
-        this.page = ''
-        this.showUpload = true
-      }else{
-        this.page = route.html
-        this.showUpload = false
-      }
-    },
+    component: '',
     onReady: function(e) {
       let router = avalon.router.vm
       this.update(router.route)
       router.$watch('route', (route) => {
         this.update(router.route)
       })
-    },
-    onDispose: function(e) {
-      let router = avalon.router.vm
-      let vm = router.route.vm //视图vm
-      let render = vm.render
-      render && render.dispose()
-      delete avalon.vmodels[vm.$id]
+    }
+  },
+  methods: {
+    update: function(route){
+      if(route.path !== '/upload'){
+        this.component = `<xmp :widget="{is: '${route.component}', id: '${route.component}'}"></xmp>`
+      }
     }
   }
 })
@@ -59,18 +36,14 @@ function Router (options) {
       this.$routes[route.path] = route
       avalon.router.add(route.path, function() {
         let self = avalon.router.vm
-        let routes = self.$routes
-        let view = self.view(this.path)
+        let route = self.$routes[this.path]
         self.route = {
-          path: view.path,// 路由路径
-          html: view.html// 视图模板
+          path: route.path,// 路由路径
+          component: route.component ? route.component.name : ''
         }
-        avalon.title.text = view.title
+        avalon.title.text = route.title
       })
     }
-  };
-  this.view = function (path) {
-    return this.$routes[path]
   };
 
   avalon.ready(()=>{
@@ -78,7 +51,6 @@ function Router (options) {
       let html, vm
       if(route.component){
         avalon.registerComponent(route.component)
-        route.html = `<xmp :widget="{is: '${route.component.name}'}"></xmp>`
       }
       this.add(route)
     });

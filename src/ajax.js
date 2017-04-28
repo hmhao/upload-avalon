@@ -12,5 +12,5 @@ let fixAjaxOptions = function (options) {
 }
 
 export default function Ajax(options){
-  return $.ajax(fixAjaxOptions(options))
+  return options ? $.ajax(fixAjaxOptions(options)) : $.Deferred()
 }
