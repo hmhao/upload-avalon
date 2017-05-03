@@ -30,13 +30,6 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new es3ifyPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
-    }),
     // extract css into its own file
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
@@ -86,14 +79,46 @@ var webpackConfig = merge(baseWebpackConfig, {
       name: 'manifest',
       chunks: ['vendor']
     }),
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
+    new ReplacePlugin([{
+      partten: /Object\.defineProperty\(__webpack_exports__,\s*"__esModule",\s*\{\s*value:\s*true\s*\}\);/g,
+      replacement: function () {
+        return '__webpack_exports__.__esModule = true;';
       }
-    ])
+    }, {
+      partten: /\/\**\/\s*Object\.defineProperty\(exports,\s*name,\s*\{[^})]*\}\);/g,
+      replacement: function () {
+        return '/******/        exports[name] = getter;';
+      }
+    }]),
+    new webpack.optimize.UglifyJsPlugin({
+      exclude: /vendor\.js/,
+      compress: {
+        warnings: false,
+        properties: false
+      },
+      sourceMap: true
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      include: /vendor\.js/,
+      mangle: false,
+      compress: {
+        warnings: false
+      },
+      sourceMap: true
+    }),
+    new ReplacePlugin([{
+      partten: /(true|false):/g,
+      replacement: function (str, p1) {
+        return '"'+p1+'":'
+      }
+    }]),
+    new es3ifyPlugin(),
+    // copy custom static assets
+    new CopyWebpackPlugin([{
+      from: path.resolve(__dirname, '../static'),
+      to: config.build.assetsSubDirectory,
+      ignore: ['.*']
+    }])
   ]
 })
 
