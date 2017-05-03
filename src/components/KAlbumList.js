@@ -1,9 +1,32 @@
+import KPanel from '@/components/base/KPanel'
 import KPagination from '@/components/base/KPagination'
 
 let template = 
 `
-<div>
-  <table class="table table-bordered"> 
+<k-panel :widget="$$ref.panel">
+  <div slot="panel-bar">
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon">排序</div>
+            <select class="form-control">
+              <option>最新上传</option>
+              <option>视频数</option>
+              <option>热度</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-9">
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-info">增加视频</button>
+          <button type="button" class="btn btn-primary">创建节目</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered" slot="panel-table"> 
     <thead>
       <tr class="text-center">
         <td><input type="checkbox" :attr="{checked: allChecked}" :click="checkAll"/></td>
@@ -54,8 +77,8 @@ let template =
       </tr>
     </tbody>
   </table>
-  <k-pagination :widget="$$ref.pagination"></k-pagination>
-</div>
+  <k-pagination :widget="$$ref.pagination" slot="panel-footer"></k-pagination>
+</k-panel>
 `
 
 export default {
@@ -123,6 +146,13 @@ export default {
   },
   // 模板书写组件:widget的值必须与ref一致,当前组件可通过ref对应的值获取到子组件的vmodel
   components: [{
+    component: KPanel,
+    $$ref: 'panel',
+    props: {
+      title: '',
+      style: 'info'
+    }
+  }, {
     component: KPagination,
     $$ref: 'pagination',
     events: ['onPageChange'] // 对依赖的组件关联事件,依赖组件分发事件时会自动调用
