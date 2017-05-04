@@ -1,7 +1,9 @@
 import user from './user'
+import album from './album'
 
 export default {
   ...user,
+  ...album,
   get (url, dtd) {
     if(url && this[url]){
       return this[url](dtd)

@@ -157,7 +157,7 @@ export default {
         return //disabled, active不会触发
       }
       this.update(cur)
-      this.onPageChange(evt, this.currentPage)
+      this.onPageChange && this.onPageChange(evt, this.currentPage)
     }
   },
   watch: {

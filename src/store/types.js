@@ -3,3 +3,12 @@ export const USER = {
   LOGOUT: 'USER/LOGOUT',
   DATA: 'USER/DATA'
 }
+
+export const ALBUM = {
+  LIST: 'ALBUM/LIST'
+}
+
+export const VIDEO = {
+  LIST: 'VIDEO/LIST'
+}
+

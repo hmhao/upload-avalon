@@ -1,15 +1,6 @@
 import Store from './base/Store'
 import user from './modules/user'
-
-const cart = {
-  state: {
-    added: [],
-    checkoutStatus: ''
-  },
-  getters: {
-    checkoutStatus: state => state.checkoutStatus
-  }
-}
+import album from './modules/album'
 
 const products = {
   state: {
@@ -23,7 +14,7 @@ const products = {
 export default new Store({
   ...user,
   modules: {
-    cart,
+    album,
     products
   }
 })
