@@ -7,19 +7,6 @@ avalon.config({
 
 function readyHook(onReady, storeMappedGetter, watch, componentRef){
   return function(){
-    avalon.each(storeMappedGetter, (i, getter) => {
-      this[getter.key] = getter.fn()// onReady赋值一次,因为可能已触发过watch回调
-      let namespace = getter.fn.namespace
-      let key = 'state.'+(namespace?namespace+'.':'')+getter.key
-      this['$$unwatch'].push(
-        avalon.store.$watch(key, (value) => {
-          this[getter.key] = value
-        })
-      )
-    })
-    avalon.each(watch, (i, w) => {
-      this['$$unwatch'].push(this.$watch(w.key, w.fn))
-    })
     avalon.each(componentRef, (i, comp) => {
       let ref = this['$$ref'][comp.$$ref]
       if(ref.id){
@@ -49,16 +36,6 @@ function readyHook(onReady, storeMappedGetter, watch, componentRef){
     onReady && onReady.call(this)
   }
 }
-function disposeHook(onDispose, storeMappedGetter, watch, componentRef){
-  return function(){
-    let unwatch
-    while (this['$$unwatch'].length) {
-      unwatch = this['$$unwatch'].pop()
-      unwatch()
-    }
-    onDispose && onDispose.call(this)
-  }
-}
 
 avalon.registerComponent = function(component) {
   if(avalon.components[component.name]) return
@@ -75,16 +52,12 @@ avalon.registerComponent = function(component) {
   let watch = []
   let componentRef = []
   if(component.computed){
-    data.$computed = data.$computed || {}
-    avalon.each(component.computed, (key, fn) => {
-      if(fn.fnName === 'mappedGetter'){
-        storeMappedGetter.push({key, fn})// 留到onReady时添加监听
-        data[key] = fn()
-      }else{
-        data.$computed[key] = fn
-      }
-    })
+    data.$computed = avalon.mix(data.$computed || {}, component.computed)
     delete component.computed
+  }
+  if(component.props){
+    avalon.mix(data, component.props)
+    delete component.props
   }
   if(component.watch){
     avalon.each(component.watch, (key, fn) => {
@@ -125,7 +98,6 @@ avalon.registerComponent = function(component) {
   data['$$unwatch'] = []
   if (storeMappedGetter.length || watch.length || componentRef.length) {
     data.onReady = readyHook(data.onReady, storeMappedGetter, watch, componentRef)
-    data.onDispose = disposeHook(data.onDispose)
   }
   component.defaults = data
   avalon.component(component.name, component)

@@ -80,9 +80,9 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunks: ['vendor']
     }),
     new ReplacePlugin([{
-      partten: /Object\.defineProperty\(__webpack_exports__,\s*"__esModule",\s*\{\s*value:\s*true\s*\}\);/g,
-      replacement: function () {
-        return '__webpack_exports__.__esModule = true;';
+      partten: /Object\.defineProperty\((__webpack_exports__|exports),\s*"__esModule",\s*\{\s*value:\s*true\s*\}\);/g,
+      replacement: function (str, p1) {
+        return p1 + '.__esModule = true;';
       }
     }, {
       partten: /\/\**\/\s*Object\.defineProperty\(exports,\s*name,\s*\{[^})]*\}\);/g,
