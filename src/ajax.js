@@ -1,3 +1,5 @@
+import api from '@/store/api'
+
 let fixAjaxOptions = function (options) {
   if(options.type && options.type.toLocaleUpperCase() == 'POST' && options.data){
     let IEVer = WebUploader.Base.browser.ie
@@ -12,5 +14,15 @@ let fixAjaxOptions = function (options) {
 }
 
 export default function Ajax(options){
-  return options ? $.ajax(fixAjaxOptions(options)) : $.Deferred()
+  if(avalon.config.local){
+    let dtd = $.Deferred()
+    if(options){
+      api.get(options.url, dtd)
+    }else{
+      dtd.reject()
+    }
+    return dtd
+  }else{
+    return options ? $.ajax(fixAjaxOptions(options)) : $.Deferred()
+  }
 }

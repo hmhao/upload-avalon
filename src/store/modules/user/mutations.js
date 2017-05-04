@@ -1,8 +1,9 @@
 // 状态事件的回调函数
+import { USER } from '@/store/types'
 import { cookie } from 'cookie'
 
 const mutations = {
-  LOGIN (state) {
+  [USER.LOGIN] (state) {
     state.isLogin = true
     state.user = {
       sid: cookie.get('sessionid', 0),
@@ -10,9 +11,14 @@ const mutations = {
       nick: cookie.get('usernick', '')
     }
   },
-  LOGOUT (state) {
+  [USER.LOGOUT] (state) {
     state.isLogin = false
     state.user = null
+  },
+  [USER.DATA] (state, data) {
+    let user = state.user
+    delete data.uid
+    avalon.mix(user, data)
   }
 }
 

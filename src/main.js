@@ -2,7 +2,8 @@
 require('avalon')
 
 avalon.config({
-  debug: true
+  debug: true,
+  local: true
 })
 
 function readyHook(onReady, storeMappedGetter, watch, componentRef){
