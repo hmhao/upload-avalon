@@ -11,10 +11,8 @@ let template =
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon">排序</div>
-            <select class="form-control">
-              <option>最新上传</option>
-              <option>视频数</option>
-              <option>热度</option>
+            <select class="form-control" :duplex="album.sort">
+              <option :for="sort in album.$sort" :attr="{value: sort.key}">{{sort.text}}</option>
             </select>
           </div>
         </div>
@@ -37,7 +35,7 @@ let template =
       </tr>
     </thead>
     <tbody>
-      <tr :for="(i, a) in album.list">
+      <tr :for="(i, a) in list">
         <td>
           <input type="checkbox" :attr="{checked: a.checked}" :click="checkOne($event, a)"/>
         </td>
@@ -80,7 +78,8 @@ export default {
   template,
   data () {
     return {
-      allChecked: false
+      allChecked: false,
+      list: []
     }
   },
   computed: {
@@ -91,9 +90,12 @@ export default {
     onReady () {
       this.getAlbumList().done((result) => {
         if(result && result.status == 200){
-          this.$$ref.pagination.totalPages = result.data.length
+          this.album.page = 1
         }
       })
+    },
+    onDispose () {
+      this.album.page = -1
     },
     checkAll (evt) {
       let checked = this.allChecked = !this.allChecked
@@ -111,6 +113,35 @@ export default {
         })
       }
     },
+    update () {
+      let album = this.album
+      let page = album.page
+      let sort = album.sort
+      let arr = album.$list
+      arr.sort((a, b) => {
+        if(sort == 'new'){
+          return new Date(a.create_time) < new Date(b.create_time)
+        }else if(sort == 'hot'){
+          return parseInt(a.plays) < parseInt(b.plays)
+        }else if(sort == 'videos'){
+          return parseInt(a.num) < parseInt(b.num)
+        }else{
+          return a.id < b.id
+        }
+      })
+      let len = arr.length
+      let limit = Math.min(len, album.$perNum)
+      let begin = (page - 1) * album.$perNum
+      let list = []
+      for (let i = begin; i < len; i++) {
+        if (list.length === limit) {
+          break;
+        }
+        list.push(arr[i])
+      }
+      this.list = list
+      this.$$ref.pagination.totalPages = Math.ceil(len / album.$perNum)
+    },
     create () {
       this.$$ref.albumDialog.init()
     },
@@ -122,6 +153,17 @@ export default {
     },
     remove () {
 
+    },
+    onPageChange (evt, curPage) {
+      this.album.page = curPage
+    }
+  },
+  watch: {
+    'album.page' (value) {
+      value && this.update()
+    },
+    'album.sort' (value) {
+      this.update()
     }
   },
   // 模板书写组件:widget的值必须与ref一致,当前组件可通过ref对应的值获取到子组件的vmodel

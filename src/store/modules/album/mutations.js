@@ -3,7 +3,7 @@ import { ALBUM } from '@/store/types'
 
 const mutations = {
   [ALBUM.LIST] (state, data) {
-    state.list = data
+    state.$list = data
   }
 }
 
