@@ -31,7 +31,7 @@ let template =
       </div>
       <div class="col-xs-6">
         <div class="btn-group pull-right">
-          <button type="button" class="btn btn-success">上传视频</button>
+          <a href="#!index" class="btn btn-success">上传视频</a>
         </div>
       </div>
     </div>

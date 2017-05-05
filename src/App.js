@@ -1,6 +1,7 @@
 import KHeader from '@/components/layout/KHeader'
 import KFooter from '@/components/layout/KFooter'
 import KNav from '@/components/layout/KNav'
+import KUploadPage from '@/components/KUploadPage'
 
 let template = 
 `
@@ -12,7 +13,8 @@ let template =
         <k-nav :widget="{is: 'k-nav'}"></k-nav>
       </div>
       <div class="col-xs-10">
-        <k-view :widget="{is: 'k-view'}"></k-view>
+        <k-upload-page :widget="{is: 'k-upload-page'}" :css="{marginTop:showUpload?'0px':'-10000px',position:showUpload?'':'absolute'}"></k-upload-page>
+        <k-view :widget="{is: 'k-view'}" :visible="!showUpload"></k-view>
       </div>
     </div>
   </div>
@@ -23,14 +25,28 @@ let template =
 export default {
   name: 'app',
   template,
-  defaults: {
+  data () {
+    return {
+      showUpload: true
+    }
+  },
+  methods: {
     onReady () {
       avalon.store.dispatch('autoLogin')
+      let router = avalon.router.vm
+      this.update(router.route)
+      router.$watch('route', (route) => {
+        this.update(router.route)
+      })
+    },
+    update: function(route){
+      this.showUpload = route.path === '/index'
     }
   },
   components: {
     KHeader,
     KNav,
-    KFooter
+    KFooter,
+    KUploadPage
   }
 }

@@ -20,6 +20,9 @@ table{border-collapse: collapse;border-spacing: 0;}
 
 .wrapper{width:940px;min-width:940px;margin:0 auto;position:relative;overflow:hidden;*zoom:1;}
 
+.navbar-default .navbar-nav > li > a.btn-success{color: #fff;}
+.navbar-default .navbar-nav > li > a.btn-success:hover,.navbar-default .navbar-nav > li > a.btn-success:focus {background-color: #398439;}
+
 /*表单*/
 .form-group .thumbnail .upload{text-align:center; font-size: 24px;position: absolute;top: 66px;left: 36px;}
 .form-group .thumbnail-desc{margin-top:90px; padding:0px;}

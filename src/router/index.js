@@ -17,7 +17,7 @@ avalon.registerComponent({
       })
     },
     update: function(route){
-      if(route.path !== '/upload'){
+      if(route.path !== '/index'){
         this.component = `<xmp :widget="{is: '${route.component}', id: '${route.component}'}"></xmp>`
       }
     }
@@ -64,7 +64,6 @@ function Router (options) {
   })
 }
 
-import KUploadPage from '../components/KUploadPage'
 import KVideoList from '../components/KVideoList'
 import KAlbumList from '../components/KAlbumList'
 
@@ -76,8 +75,7 @@ export default new Router({
     },
     {
       path: '/index',
-      title: '上传',
-      component: KUploadPage
+      title: '上传'
     },
     {
       path: '/video',
