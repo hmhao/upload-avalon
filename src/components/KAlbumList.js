@@ -1,5 +1,6 @@
 import KPanel from '@/components/base/KPanel'
 import KPagination from '@/components/base/KPagination'
+import KAlbum from '@/components/dialog/KAlbum'
 
 let template = 
 `
@@ -20,8 +21,7 @@ let template =
       </div>
       <div class="col-xs-9">
         <div class="btn-group pull-right">
-          <button type="button" class="btn btn-info">增加视频</button>
-          <button type="button" class="btn btn-primary">创建节目</button>
+          <button type="button" class="btn btn-primary" :click="create">创建节目</button>
         </div>
       </div>
     </div>
@@ -37,37 +37,30 @@ let template =
       </tr>
     </thead>
     <tbody>
-      <tr :for="(i, v) in album.list">
+      <tr :for="(i, a) in album.list">
         <td>
-          <input type="checkbox" :attr="{checked: v.checked}" :click="checkOne($event, v)"/>
+          <input type="checkbox" :attr="{checked: a.checked}" :click="checkOne($event, a)"/>
         </td>
         <td style="width: 60%">
           <div class="media">
             <div class="media-left">
               <a href="javascript:void(0)">
-                <img style="width: 100px; height: 138px;" :attr="{src: v.poster}">
+                <img style="width: 100px; height: 138px;" :attr="{src: a.poster}">
               </a>
             </div>
             <div class="media-body text-left">
               <dl>
-                <dt :attr="{title: v.title}">{{v.title}}</dt>
-                <dd>{{v.create_time}}</dd>
+                <dt :attr="{title: a.title}">{{a.title}}</dt>
+                <dd>{{a.create_time}}</dd>
               </dl>
             </div>
           </div>
         </td>
         <td>
-          <p>{{v.num}}</p>
+          <p>{{a.num}}</p>
         </td>
         <td>
-          <p>
-            <i class="icon icon_redio"></i>
-            <span class="redtext">{{v.plays}}</span>
-          </p>
-          <p>
-            <i class="icon icon_redio"></i>
-            <span class="redtext">{{v.comments}}</span>
-          </p>
+          <p><i class="glyphicon glyphicon-expand"></i>{{a.plays}}</p>
         </td>
         <td>
           <p><a href="javascript:void(0)" :click="add">添加视频</a></p>
@@ -78,6 +71,7 @@ let template =
     </tbody>
   </table>
   <k-pagination :widget="$$ref.pagination" slot="panel-footer"></k-pagination>
+  <k-album :widget="$$ref.albumDialog" slot="panel-dialog"></k-album>
 </k-panel>
 `
 
@@ -103,19 +97,22 @@ export default {
     },
     checkAll (evt) {
       let checked = this.allChecked = !this.allChecked
-      this.list.forEach(function(v) {
-        v.checked = checked
+      this.list.forEach(function(item) {
+        item.checked = checked
       })
     },
-    checkOne (evt, video) {
-      let checked = video.checked = !video.checked
+    checkOne (evt, album) {
+      let checked = album.checked = !album.checked
       if (checked === false) {
         this.allChecked = false
       } else {//avalon已经为数组添加了ecma262v5的一些新方法
-        this.allChecked = this.list.every(function (v) {
-          return v.checked
+        this.allChecked = this.list.every(function (item) {
+          return item.checked
         })
       }
+    },
+    create () {
+      this.$$ref.albumDialog.init()
     },
     add () {
 
@@ -139,5 +136,8 @@ export default {
     component: KPagination,
     $$ref: 'pagination',
     events: ['onPageChange'] // 对依赖的组件关联事件,依赖组件分发事件时会自动调用
+  }, {
+    component: KAlbum,
+    $$ref: 'albumDialog'
   }]
 }

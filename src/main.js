@@ -132,6 +132,37 @@ avalon.bootstrap = function(options) {
   avalon.innerHTML(root, template)
 }
 
+let matchExpr = /^([.#])?([\w-]*)$/
+avalon.fn.mix({
+  is: function (expr) {
+    let isMatch = false
+    let match = matchExpr.exec(expr)
+    if(match){
+      switch (match[1]){
+        case '.': isMatch = this.hasClass(match[2]);break;
+        case '#': isMatch = this.attr('id') == match[2];break;
+        default: isMatch = new RegExp(match[2], 'i').test(this.element.tagName);
+      }
+    }
+    return isMatch
+  },
+  parent: function (selector) {
+    let elem = this.element
+    let msElem
+    if(elem){
+      while((elem = elem.parentNode) && elem.nodeType !== 9) {
+        if (elem.nodeType === 1) {
+          msElem = avalon(elem)
+          if(!selector || msElem.is(selector)){
+            return msElem
+          }
+        }
+      }
+    }
+    return avalon(null)
+  }
+});
+
 require('./store')
 require('./router')
 

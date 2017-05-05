@@ -70,14 +70,8 @@ let template =
           <p>{{v.status | statusMsg}}</p>
         </td>
         <td>
-          <p>
-            <i class="icon icon_redio"></i>
-            <span class="redtext">{{v.plays}}</span>
-          </p>
-          <p>
-            <i class="icon icon_redio"></i>
-            <span class="redtext">{{v.comments}}</span>
-          </p>
+          <p><i class="glyphicon glyphicon-expand"></i>{{v.plays}}</p>
+          <p><i class="glyphicon glyphicon-comment"></i>{{v.comments}}</p>
         </td>
         <td>
           <p><a href="javascript:void(0)" :click="edit">编辑</a></p>
@@ -118,8 +112,8 @@ export default {
     },
     checkAll (evt) {
       let checked = this.allChecked = !this.allChecked
-      this.list.forEach(function(v) {
-        v.checked = checked
+      this.list.forEach(function(item) {
+        item.checked = checked
       })
     },
     checkOne (evt, video) {
@@ -127,8 +121,8 @@ export default {
       if (checked === false) {
         this.allChecked = false
       } else {//avalon已经为数组添加了ecma262v5的一些新方法
-        this.allChecked = this.list.every(function (v) {
-          return v.checked
+        this.allChecked = this.list.every(function (item) {
+          return item.checked
         })
       }
     },

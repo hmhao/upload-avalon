@@ -8,6 +8,7 @@ var template =
   <slot name="panel-table"></slot>
   <slot name="panel-list"></slot>
   <div class="panel-footer"><slot name="panel-footer"></slot></div>
+  <slot name="panel-dialog"></slot>
 </div>
 `
 

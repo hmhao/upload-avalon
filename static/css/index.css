@@ -20,6 +20,13 @@ table{border-collapse: collapse;border-spacing: 0;}
 
 .wrapper{width:940px;min-width:940px;margin:0 auto;position:relative;overflow:hidden;*zoom:1;}
 
+/*表单*/
+.form-group .thumbnail .upload{text-align:center; font-size: 24px;position: absolute;top: 66px;left: 36px;}
+.form-group .thumbnail-desc{margin-top:90px; padding:0px;}
+.has-error .thumbnail {border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
+
+
+
 /*footer*/
 .footer{background:#FFFFFF;line-height:24px;padding:40px 0;margin-top:20px;}
 .footer_link {height: 120px;}
