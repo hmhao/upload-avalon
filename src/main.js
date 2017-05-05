@@ -6,8 +6,11 @@ avalon.config({
   local: true
 })
 
-function readyHook(onReady, storeMappedGetter, watch, componentRef){
+function readyHook(onReady, watch, componentRef){
   return function(){
+    avalon.each(watch, (i, w) => {
+      this['$$unwatch'].push(this.$watch(w.key, w.fn))
+    })
     avalon.each(componentRef, (i, comp) => {
       let ref = this['$$ref'][comp.$$ref]
       if(ref.id){
@@ -38,6 +41,17 @@ function readyHook(onReady, storeMappedGetter, watch, componentRef){
   }
 }
 
+function disposeHook(onDispose){
+  return function(){
+    let unwatch
+    while (this['$$unwatch'].length) {
+      unwatch = this['$$unwatch'].pop()
+      unwatch()
+    }
+    onDispose && onDispose.call(this)
+  }
+}
+
 avalon.registerComponent = function(component) {
   if(avalon.components[component.name]) return
 
@@ -49,7 +63,6 @@ avalon.registerComponent = function(component) {
     avalon.warn(component.name + ' >> data functions should return an object')
   }
 
-  let storeMappedGetter = []
   let watch = []
   let componentRef = []
   if(component.computed){
@@ -97,8 +110,9 @@ avalon.registerComponent = function(component) {
     avalon.registerComponent(comp)// 注册组件
   })
   data['$$unwatch'] = []
-  if (storeMappedGetter.length || watch.length || componentRef.length) {
-    data.onReady = readyHook(data.onReady, storeMappedGetter, watch, componentRef)
+  if (watch.length || componentRef.length) {
+    data.onReady = readyHook(data.onReady, watch, componentRef)
+    data.onDispose = disposeHook(data.onDispose)
   }
   component.defaults = data
   avalon.component(component.name, component)

@@ -50,18 +50,20 @@ export default {
   data (){
     return {
       $disable:{},//存放first, last, prev, next的disabled状态
-      showPages: 5,//要显示出来的页数
       pages: [],
-      totalPages: 1,//总页数
-      currentPage: 1,//当前页
-      align: -1,//对齐 -1:左 | 0:中 | 1:右
-      firstText: '',
-      prevText: '上一页',
-      nextText: '下一页',
-      lastText: '',
       showFirstOmit: false,
       showLastOmit: false
     }
+  },
+  props: {
+    showPages: 5,//要显示出来的页数
+    totalPages: 1,//总页数
+    currentPage: 1,//当前页
+    align: -1,//对齐 -1:左 | 0:中 | 1:右
+    firstText: '',
+    prevText: '上一页',
+    nextText: '下一页',
+    lastText: '',
   },
   methods: {
     onInit (evt) {

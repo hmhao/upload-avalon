@@ -100,7 +100,6 @@ export default {
           this.$$ref.pagination.totalPages = result.data.length
         }
       })
-      
     },
     checkAll (evt) {
       let checked = this.allChecked = !this.allChecked
