@@ -277,8 +277,8 @@ function makeLocalContext (store, namespace, path) {
   // getters and state object must be gotten lazily
   // because they will be changed by vm update
   local.getters = noNamespace
-    ? () => store.getters
-    : () => makeLocalGetters(store, namespace)
+    ? store.getters
+    : makeLocalGetters(store, namespace)
 
   local.getState = () => getNestedState(store.getState(), path)
   return local
@@ -322,7 +322,7 @@ function registerAction (store, type, handler, local) {
     let res = handler({
       dispatch: local.dispatch,
       commit: local.commit,
-      getters: local.getters(),
+      getters: local.getters,
       state: local.getState(),
       rootGetters: store.getters,
       rootState: store.getState()
@@ -346,7 +346,7 @@ function registerGetter (store, type, rawGetter, local) {
     // 为原getters传入对应状态
     return rawGetter(
       local.getState(), // local state
-      local.getters(), // local getters
+      local.getters, // local getters
       store.getState(), // root state
       store.getters // root getters
     )

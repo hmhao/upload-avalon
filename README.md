@@ -1,2 +1,2 @@
 # upload-avalon
-基于avalon使用WebUploader实现的上传例子
+基于avalon使用WebUploader实现的上传例子,组件编写方式采用类似vue风格

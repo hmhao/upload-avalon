@@ -3,7 +3,7 @@ import { VIDEO } from '@/store/types'
 
 const mutations = {
   [VIDEO.LIST] (state, data) {
-    state.list = data
+    state.$list = data
   }
 }
 
