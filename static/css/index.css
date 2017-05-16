@@ -28,7 +28,7 @@ table{border-collapse: collapse;border-spacing: 0;}
 .form-group .thumbnail-desc{margin-top:90px; padding:0px;}
 .has-error .thumbnail {border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
 
-
+.alert {position: fixed; top: 30%; left: 37%; width: 300px; z-index: 2000;}
 
 /*footer*/
 .footer{line-height:24px; margin-top:20px;}

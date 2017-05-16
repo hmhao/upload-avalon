@@ -1,6 +1,7 @@
 import KHeader from '@/components/layout/KHeader'
 import KFooter from '@/components/layout/KFooter'
 import KNav from '@/components/layout/KNav'
+import KAlert from '@/components/base/KAlert'
 import KUploadPage from '@/components/KUploadPage'
 
 let template = 
@@ -19,6 +20,7 @@ let template =
     </div>
   </div>
   <k-footer :widget="{is: 'k-footer'}"></k-footer>
+  <k-alert :widget="{is: 'k-alert'}"></k-alert>
 </div>
 `
 
@@ -47,6 +49,7 @@ export default {
     KHeader,
     KNav,
     KFooter,
-    KUploadPage
+    KUploadPage,
+    KAlert
   }
 }

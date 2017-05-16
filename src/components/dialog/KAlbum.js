@@ -22,7 +22,7 @@ var template =
       <div class="form-group">
         <label class="col-sm-2 control-label"><i class="glyphicon glyphicon-asterisk text-danger"></i>标题：</label>
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="标题请控制在24个字内" :duplex="album.name" :rules="{required:true}">
+          <input type="text" class="form-control" placeholder="标题请控制在24个字内" :duplex="album.name" :rules="{required:true, maxlength:24}" data-required-message="标题必须填写" data-maxlength-message="标题超过24字">
         </div>
       </div>
       <div class="form-group">
@@ -75,21 +75,28 @@ let validate = {//表单校验
     })
   },
   onError (reasons) {
+    let haveAlert = false
     reasons.forEach(function (reason) {
       let elem = avalon(reason.element)
       let parent = elem.parent('.form-group')
       parent.addClass('has-error')
+      if (!haveAlert) {
+        avalon.alert(reason.getMessage(), 'danger')
+        haveAlert = true
+      }
     })
   },
   onValidateAll (reasons) {
     let vm = this._ms_validate_.vm
     if(!vm.album.poster){
-      reasons.push({
+      reasons.unshift({
         element: document.getElementById('pickerImg'),
         data: {required: true},
-        message: '必须上传',
+        message: '封面必须上传',
         validateRule: 'required',
-        getMessage: avalon.noop
+        getMessage () {
+          return this.message
+        }
       })
     }
     if (reasons.length) {
@@ -157,6 +164,7 @@ export default {
       console.log('uploadError', reason)
     },
     submit () {
+      avalon.alert('保存成功')
       this.$$ref.modal.close()
     },
     reset () {
