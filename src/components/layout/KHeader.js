@@ -28,7 +28,7 @@ export default {
     }
   },
   computed: {
-    ...avalon.store.mapGetters(['isLogin', 'user']),
+    ...avalon.store.mapState(['isLogin', 'user']),
     loginText () {
       return this.isLogin ? '退出' : '登录'
     }

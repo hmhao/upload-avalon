@@ -31,7 +31,7 @@ table{border-collapse: collapse;border-spacing: 0;}
 
 
 /*footer*/
-.footer{background:#FFFFFF;line-height:24px;padding:40px 0;margin-top:20px;}
+.footer{line-height:24px; margin-top:20px;}
 .footer_link {height: 120px;}
 .footer_link dl {float: left; display: inline; width: 109px; height: 120px; margin-left: 60px; border-right: 1px #e5e5e5 solid;}
 .footer_link .first {margin: 0 0 0 160px;}

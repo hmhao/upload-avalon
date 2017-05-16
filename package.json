@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "avalon2": "^2.2.4",
+    "avalonx": "^1.0.1",
     "cookie_js": "^1.2.2",
     "es6-promise": "^4.1.0",
     "lodash": "^4.17.4"

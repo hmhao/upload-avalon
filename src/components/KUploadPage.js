@@ -21,7 +21,7 @@ export default {
     return {}
   },
   computed: {
-    ...avalon.store.mapGetters(['isLogin'])
+    ...avalon.store.mapState(['isLogin'])
   },
   components: {
     KUpload

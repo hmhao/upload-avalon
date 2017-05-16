@@ -97,7 +97,7 @@ export default {
     }
   },
   computed: {
-    ...avalon.store.mapGetters(['video']),
+    ...avalon.store.mapState(['video']),
   },
   methods: {
     ...avalon.store.mapActions(['getVideoList']),

@@ -83,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...avalon.store.mapGetters(['album']),
+    ...avalon.store.mapState(['album']),
   },
   methods: {
     ...avalon.store.mapActions(['getAlbumList']),
